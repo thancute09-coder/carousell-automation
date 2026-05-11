@@ -1,0 +1,44 @@
+{
+  "searchUrls": [
+    "https://www.carousell.ph/search/vintage%20furniture?sort_by=time_created%2Cdescending",
+    "https://www.carousell.ph/search/antique%20furniture?sort_by=time_created%2Cdescending",
+    "https://www.carousell.ph/search/vintage%20dining%20table?sort_by=time_created%2Cdescending",
+    "https://www.carousell.ph/search/antique%20dining%20table?sort_by=time_created%2Cdescending",
+    "https://www.carousell.ph/search/vintage%20cabinet?sort_by=time_created%2Cdescending",
+    "https://www.carousell.ph/search/antique%20cabinet?sort_by=time_created%2Cdescending",
+    "https://www.carousell.ph/search/vintage%20sofa?sort_by=time_created%2Cdescending",
+    "https://www.carousell.ph/search/antique%20sofa?sort_by=time_created%2Cdescending"
+  ],
+  "keywords": [
+    "vintage dining table",
+    "antique dining table",
+    "vintage accent chair",
+    "antique accent chair",
+    "vintage rattan",
+    "antique rattan",
+    "vintage solid wood",
+    "antique solid wood",
+    "vintage cabinet",
+    "antique cabinet",
+    "vintage sofa",
+    "antique sofa",
+    "vintage coffee table",
+    "antique coffee table",
+    "vintage side table",
+    "antique side table",
+    "vintage wooden chair",
+    "antique wooden chair"
+  ],
+  "scanIntervalMinutes": 5,
+  "outputCsv": "furniture_matches.csv",
+  "outputJson": "furniture_matches.json",
+  "webJson": "listings.json",
+  "webJsonMax": 500,
+  "webJsonMaxAgeDays": 7,
+  "googleSheets": {
+    "enabled": true,
+    "spreadsheetId": "1NAXaoWvIxsLpNW6gin8KcWbPGYXrNbwTTtcPUF_rCag",
+    "sheetName": "Sheet1",
+    "serviceAccountPath": "google-service-account.json"
+  }
+}

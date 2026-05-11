@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vintage & Antique Furniture — Carousell PH</title>
+  <style>
+    :root {
+      --bg: #faf7f2;
+      --card-bg: #ffffff;
+      --text: #2a2622;
+      --muted: #7a716a;
+      --accent: #b54b1f;
+      --accent-soft: #fbe8df;
+      --border: #e8e1d6;
+      --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+    }
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+    h1 {
+      font-size: 1.1rem;
+      margin: 0;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .meta {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+    .meta strong { color: var(--text); }
+    .controls {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .search {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      width: 220px;
+      background: #fff;
+      color: var(--text);
+    }
+    .search:focus { outline: none; border-color: var(--accent); }
+    .toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      cursor: pointer;
+      user-select: none;
+    }
+    .toggle input { accent-color: var(--accent); }
+
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+    .grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      position: relative;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05), 0 12px 24px rgba(0,0,0,0.06);
+    }
+    .card a {
+      color: inherit;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .thumb {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #f0ebe2;
+      overflow: hidden;
+      display: block;
+    }
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .thumb-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    .body {
+      padding: 0.75rem 0.9rem 0.9rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 0.4rem;
+    }
+    .title {
+      font-size: 0.92rem;
+      font-weight: 500;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 2.5em;
+    }
+    .price {
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 1rem;
+    }
+    .row {
+      font-size: 0.78rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .row span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .badge {
+      position: absolute;
+      top: 0.6rem;
+      left: 0.6rem;
+      background: var(--accent);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 20px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .empty {
+      padding: 4rem 1rem;
+      text-align: center;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem 3rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    @media (max-width: 640px) {
+      .search { width: 100%; }
+      .header-inner { flex-direction: column; align-items: stretch; }
+      .controls { justify-content: space-between; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div>
+        <h1>Vintage &amp; Antique Furniture — Carousell PH</h1>
+        <div class="meta" id="meta">Loading…</div>
+      </div>
+      <div class="controls">
+        <input type="search" class="search" id="search" placeholder="Filter title, location, seller…" autocomplete="off" />
+        <label class="toggle">
+          <input type="checkbox" id="freshOnly" />
+          Last hour only
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty" hidden>No listings match your filter.</div>
+  </main>
+
+  <footer>
+    Data scraped from Carousell PH search results. Click any card to view the full listing.
+  </footer>
+
+  <script>
+    const gridEl = document.getElementById('grid');
+    const emptyEl = document.getElementById('empty');
+    const metaEl = document.getElementById('meta');
+    const searchEl = document.getElementById('search');
+    const freshEl = document.getElementById('freshOnly');
+
+    let allListings = [];
+
+    function escapeHtml(s) {
+      if (!s) return '';
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function formatRelative(isoString) {
+      if (!isoString) return '';
+      const t = new Date(isoString).getTime();
+      if (!t) return '';
+      const diffMs = Date.now() - t;
+      const min = Math.round(diffMs / 60000);
+      if (min < 1) return 'just now';
+      if (min < 60) return min + 'm ago';
+      const hr = Math.round(min / 60);
+      if (hr < 24) return hr + 'h ago';
+      const d = Math.round(hr / 24);
+      return d + 'd ago';
+    }
+
+    function renderCard(l) {
+      const fresh = l.fresh_within_last_hour === true || l.fresh_within_last_hour === 'TRUE';
+      const img = l.image_url
+        ? `<img src="${escapeHtml(l.image_url)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=&quot;thumb-placeholder&quot;>no image</div>';" />`
+        : '<div class="thumb-placeholder">no image</div>';
+      const posted = l.posted_time || formatRelative(l.estimated_posted_at);
+      return `
+        <article class="card">
+          ${fresh ? '<div class="badge">Hot</div>' : ''}
+          <a href="${escapeHtml(l.listing_url)}" target="_blank" rel="noopener noreferrer">
+            <div class="thumb">${img}</div>
+            <div class="body">
+              <div class="title">${escapeHtml(l.title || '(untitled)')}</div>
+              <div class="price">${escapeHtml(l.price || '—')}</div>
+              <div class="row">
+                <span>${escapeHtml(l.location || '')}</span>
+                <span>${escapeHtml(posted)}</span>
+              </div>
+            </div>
+          </a>
+        </article>
+      `;
+    }
+
+    function render() {
+      const q = searchEl.value.trim().toLowerCase();
+      const onlyFresh = freshEl.checked;
+
+      const filtered = allListings.filter((l) => {
+        if (onlyFresh && !(l.fresh_within_last_hour === true || l.fresh_within_last_hour === 'TRUE')) {
+          return false;
+        }
+        if (!q) return true;
+        const hay = `${l.title || ''} ${l.location || ''} ${l.seller_name || ''} ${l.price || ''}`.toLowerCase();
+        return hay.includes(q);
+      });
+
+      gridEl.innerHTML = filtered.map(renderCard).join('');
+      emptyEl.hidden = filtered.length > 0;
+    }
+
+    async function load() {
+      try {
+        const res = await fetch('listings.json?_=' + Date.now());
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        allListings = Array.isArray(data) ? data : (data.listings || []);
+        const generated = data.generated_at;
+        const total = data.count || allListings.length;
+        const totalAll = data.total_matches || total;
+        const win = data.window_days ? ` from past ${data.window_days} day${data.window_days === 1 ? '' : 's'}` : '';
+        metaEl.innerHTML = `<strong>${total}</strong> listings${win} · <strong>${totalAll.toLocaleString()}</strong> total matches scanned · updated ${formatRelative(generated) || 'just now'}`;
+        render();
+      } catch (err) {
+        metaEl.textContent = 'Failed to load listings.json — ' + err.message;
+        console.error(err);
+      }
+    }
+
+    searchEl.addEventListener('input', render);
+    freshEl.addEventListener('change', render);
+    load();
+  </script>
+</body>
+</html>
