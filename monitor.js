@@ -128,7 +128,9 @@ function enrichHistoricalImages(filePath, enrichmentMap) {
   let updated = 0;
   for (const r of records) {
     if (r.image_url && r.image_url.length > 0) continue; // already has one
-    const fresh = enrichmentMap.get(r.listing_url);
+    // Match by normalized URL — historical records may have stored URLs
+    // with old tracking params that wouldn't match the current scan's.
+    const fresh = enrichmentMap.get(normalizeListingUrl(r.listing_url));
     if (fresh) {
       r.image_url = fresh;
       updated++;
@@ -397,6 +399,22 @@ function matchesKeyword(text, keywords) {
   return keywords.some((kw) => lower.includes(kw.toLowerCase()));
 }
 
+/**
+ * Carousell appends fresh tracking params (?t-id=..., t-referrer_*, etc.)
+ * to every listing URL on every page visit. To dedupe and back-fill
+ * correctly across scans, we key off the URL with the query string and
+ * hash stripped — leaving just the stable origin + listing path.
+ */
+function normalizeListingUrl(url) {
+  if (!url) return '';
+  try {
+    const u = new URL(url);
+    return u.origin + u.pathname.replace(/\/+$/, '');
+  } catch {
+    return url.split('?')[0].split('#')[0].replace(/\/+$/, '');
+  }
+}
+
 // ------------------------------------------------------------------
 // Scraping
 // ------------------------------------------------------------------
@@ -415,11 +433,27 @@ async function extractListings(page, sourceUrl) {
     return [];
   }
 
-  // Light scroll to coax lazy-loaded cards into the DOM.
-  await page.evaluate(() => window.scrollBy(0, 800));
+  // Scroll all the way through the page to coax every lazy-loaded image
+  // into its real src. Carousell's image grid uses IntersectionObserver,
+  // so each card has to be visible at least once before its <img>
+  // populates. We loop scrolling to the bottom until page height stops
+  // growing (handles infinite scroll), capped to keep scans bounded.
+  let lastHeight = 0;
+  for (let i = 0; i < 10; i++) {
+    const h = await page.evaluate(() => {
+      window.scrollTo(0, document.body.scrollHeight);
+      return document.body.scrollHeight;
+    });
+    await page.waitForTimeout(700);
+    if (h === lastHeight) break;
+    lastHeight = h;
+  }
+  // Final pause to let images finish loading after the last scroll.
   await page.waitForTimeout(800);
-  await page.evaluate(() => window.scrollBy(0, 800));
-  await page.waitForTimeout(800);
+  // Scroll back to top — not strictly required ($$eval reads all DOM),
+  // but useful for parity with manual browsing.
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(300);
 
   const baseOrigin = new URL(sourceUrl).origin;
 
@@ -497,26 +531,32 @@ async function extractListings(page, sourceUrl) {
         );
         location = shortLines[0] || '';
 
-        // First product image inside the card. Skip lazy-load placeholders
-        // and tiny tracking pixels by preferring src over data-src and
-        // bailing on data: URIs.
+        // First product image inside the card. Carousell URLs:
+        //   /media/photos/profiles/... → seller avatar (skip)
+        //   /media/photos/products/... → product photo (want)
+        // Strategy: walk all <img> elements, take the first URL that
+        // looks like a product photo. Fall back to any non-avatar src.
         let imageUrl = '';
         const imgs = card.querySelectorAll('img');
+        const candidates = [];
         for (const img of imgs) {
-          const candidate =
+          const raw =
             img.getAttribute('src') ||
             img.getAttribute('data-src') ||
             img.getAttribute('data-original') ||
             '';
-          if (!candidate) continue;
-          if (candidate.startsWith('data:')) continue;
-          if (candidate.includes('/avatar/') || candidate.includes('/profile/')) {
-            // Skip seller avatar — we want the product photo.
-            continue;
-          }
-          imageUrl = candidate.startsWith('//') ? 'https:' + candidate : candidate;
-          break;
+          if (!raw) continue;
+          if (raw.startsWith('data:')) continue;
+          const abs = raw.startsWith('//') ? 'https:' + raw : raw;
+          // Skip seller avatar URLs.
+          if (/\/photos\/profiles\//.test(abs) || /\/avatar\//.test(abs)) continue;
+          candidates.push(abs);
         }
+        // Prefer URLs that explicitly contain /products/, else first non-avatar.
+        imageUrl =
+          candidates.find((c) => /\/photos\/products\//.test(c)) ||
+          candidates[0] ||
+          '';
 
         results.push({
           title,
@@ -552,10 +592,20 @@ async function scanOnce(browser, config, seen) {
   const jsonPath = path.join(ROOT, config.outputJson);
 
   const newMatches = [];
-  // Map of listing_url -> image_url scraped this run. Used to back-fill
-  // image_url on previously-seen records that were captured before image
-  // extraction was added.
+  // Map of normalized listing_url -> image_url scraped this run. Used to
+  // back-fill image_url on previously-seen records that were captured
+  // before image extraction worked. Keyed by normalized URL so we match
+  // across scans even though Carousell rotates query string tracking
+  // params on each page visit.
   const enrichmentMap = new Map();
+
+  // Build a lookup of normalized -> original-key for the seen index so
+  // we can recognize a listing as already-seen even when its current URL
+  // has different tracking params than the stored one.
+  const normalizedSeen = new Map();
+  for (const key of Object.keys(seen)) {
+    normalizedSeen.set(normalizeListingUrl(key), key);
+  }
 
   for (const url of config.searchUrls) {
     let context;
@@ -581,10 +631,15 @@ async function scanOnce(browser, config, seen) {
 
       for (const l of listings) {
         if (!l.listing_url) continue;
+        const normalizedUrl = normalizeListingUrl(l.listing_url);
+
         // Capture image_url for ALL scraped listings (new or already-seen)
-        // so we can back-fill missing images on historical records.
-        if (l.image_url) enrichmentMap.set(l.listing_url, l.image_url);
-        if (seen[l.listing_url]) continue; // already reported
+        // so we can back-fill missing images on historical records. Keyed
+        // by the normalized URL so it matches stored records regardless
+        // of query-string tracking params.
+        if (l.image_url) enrichmentMap.set(normalizedUrl, l.image_url);
+
+        if (normalizedSeen.has(normalizedUrl)) continue; // already reported in a previous scan
         if (!matchesKeyword(`${l.title} ${l.seller_name}`, config.keywords)) continue;
 
         const parsedDate = parseRelativeTime(l.posted_time);
@@ -596,7 +651,9 @@ async function scanOnce(browser, config, seen) {
           location: l.location,
           seller_name: l.seller_name,
           posted_time: l.posted_time,
-          listing_url: l.listing_url,
+          // Store the normalized URL so future runs match cleanly. The
+          // listing_url still resolves correctly when clicked.
+          listing_url: normalizedUrl,
           image_url: l.image_url || '',
           source_search_url: url,
           first_seen_at: nowIso(),
@@ -604,12 +661,13 @@ async function scanOnce(browser, config, seen) {
         };
 
         newMatches.push(record);
-        seen[l.listing_url] = {
+        seen[normalizedUrl] = {
           first_seen_at: record.first_seen_at,
           source_search_url: url,
           // pushed_to_sheet starts false; flipped true after a successful Sheets push.
           pushed_to_sheet: false,
         };
+        normalizedSeen.set(normalizedUrl, normalizedUrl);
       }
 
       await page.close();

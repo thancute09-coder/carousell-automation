@@ -1,0 +1,14 @@
+
+[2026-05-11T06:04:01.554Z] === Scan started ===
+[2026-05-11T06:04:01.557Z] Scanning: https://www.carousell.ph/search/vintage%20furniture?sort_by=time_created%2Cdescending
+[2026-05-11T06:04:14.819Z] Scanning: https://www.carousell.ph/search/antique%20furniture?sort_by=time_created%2Cdescending
+[2026-05-11T06:04:24.631Z] Scanning: https://www.carousell.ph/search/vintage%20dining%20table?sort_by=time_created%2Cdescending
+[2026-05-11T06:04:36.933Z] Scanning: https://www.carousell.ph/search/antique%20dining%20table?sort_by=time_created%2Cdescending
+[2026-05-11T06:04:50.190Z] Scanning: https://www.carousell.ph/search/vintage%20cabinet?sort_by=time_created%2Cdescending
+[2026-05-11T06:04:59.160Z] Scanning: https://www.carousell.ph/search/antique%20cabinet?sort_by=time_created%2Cdescending
+[2026-05-11T06:05:12.307Z] Scanning: https://www.carousell.ph/search/vintage%20sofa?sort_by=time_created%2Cdescending
+[2026-05-11T06:05:22.279Z] Scanning: https://www.carousell.ph/search/antique%20sofa?sort_by=time_created%2Cdescending
+[2026-05-11T06:05:35.765Z] No new matches this scan.
+[2026-05-11T06:05:35.773Z] --once mode: exiting after single scan.
+
+[2026-05-11T06:05:35.773Z] Shutting down...
