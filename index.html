@@ -58,16 +58,33 @@
       flex-wrap: wrap;
       align-items: center;
     }
-    .search {
+    .search, .price-input {
       padding: 0.5rem 0.75rem;
       border: 1px solid var(--border);
       border-radius: 8px;
       font-size: 0.9rem;
-      width: 220px;
       background: #fff;
       color: var(--text);
     }
-    .search:focus { outline: none; border-color: var(--accent); }
+    .search { width: 220px; }
+    .price-input {
+      width: 110px;
+      text-align: right;
+    }
+    .search:focus, .price-input:focus { outline: none; border-color: var(--accent); }
+    .price-input::-webkit-outer-spin-button,
+    .price-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .price-input { -moz-appearance: textfield; }
+    .price-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
     .toggle {
       display: inline-flex;
       align-items: center;
@@ -204,9 +221,18 @@
       </div>
       <div class="controls">
         <input type="search" class="search" id="search" placeholder="Filter title, location, seller…" autocomplete="off" />
+        <span class="price-group">
+          <input type="number" class="price-input" id="priceMin" placeholder="Min ₱" min="0" step="100" />
+          <span>–</span>
+          <input type="number" class="price-input" id="priceMax" placeholder="Max ₱" min="0" step="100" />
+        </span>
         <label class="toggle">
           <input type="checkbox" id="freshOnly" />
           Last hour only
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="dedupe" />
+          Hide duplicates
         </label>
       </div>
     </div>
@@ -227,8 +253,23 @@
     const metaEl = document.getElementById('meta');
     const searchEl = document.getElementById('search');
     const freshEl = document.getElementById('freshOnly');
+    const priceMinEl = document.getElementById('priceMin');
+    const priceMaxEl = document.getElementById('priceMax');
+    const dedupeEl = document.getElementById('dedupe');
 
     let allListings = [];
+
+    /**
+     * Pull a numeric price out of a Carousell price string.
+     * Handles "PHP 2,500", "₱ 1,200", "P5500", etc. Returns NaN when no
+     * digits are present (e.g., "Free", "Trade", or blank).
+     */
+    function parsePrice(s) {
+      if (!s) return NaN;
+      const cleaned = String(s).replace(/[^\d.]/g, '');
+      if (!cleaned) return NaN;
+      return parseFloat(cleaned);
+    }
 
     function escapeHtml(s) {
       if (!s) return '';
@@ -281,18 +322,48 @@
     function render() {
       const q = searchEl.value.trim().toLowerCase();
       const onlyFresh = freshEl.checked;
+      const min = priceMinEl.value === '' ? null : parseFloat(priceMinEl.value);
+      const max = priceMaxEl.value === '' ? null : parseFloat(priceMaxEl.value);
 
       const filtered = allListings.filter((l) => {
         if (onlyFresh && !(l.fresh_within_last_hour === true || l.fresh_within_last_hour === 'TRUE')) {
           return false;
         }
-        if (!q) return true;
-        const hay = `${l.title || ''} ${l.location || ''} ${l.seller_name || ''} ${l.price || ''}`.toLowerCase();
-        return hay.includes(q);
+        // Price filter. Listings with unparseable prices are kept only when
+        // no price bound is set; otherwise they're excluded so the bounds
+        // are meaningful.
+        if (min !== null || max !== null) {
+          const price = parsePrice(l.price);
+          if (isNaN(price)) return false;
+          if (min !== null && price < min) return false;
+          if (max !== null && price > max) return false;
+        }
+        if (q) {
+          const hay = `${l.title || ''} ${l.location || ''} ${l.seller_name || ''} ${l.price || ''}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
       });
 
-      gridEl.innerHTML = filtered.map(renderCard).join('');
-      emptyEl.hidden = filtered.length > 0;
+      // Optional: collapse duplicates by (title + price). Because the
+      // source array is sorted newest-first, the first occurrence kept
+      // is the most recent listing for that title/price combo.
+      let result = filtered;
+      if (dedupeEl.checked) {
+        const seenKeys = new Set();
+        result = [];
+        for (const l of filtered) {
+          const t = (l.title || '').trim().toLowerCase().replace(/\s+/g, ' ');
+          const p = parsePrice(l.price);
+          const key = t + '|' + (isNaN(p) ? (l.price || '') : p);
+          if (seenKeys.has(key)) continue;
+          seenKeys.add(key);
+          result.push(l);
+        }
+      }
+
+      gridEl.innerHTML = result.map(renderCard).join('');
+      emptyEl.hidden = result.length > 0;
     }
 
     async function load() {
@@ -315,6 +386,9 @@
 
     searchEl.addEventListener('input', render);
     freshEl.addEventListener('change', render);
+    priceMinEl.addEventListener('input', render);
+    priceMaxEl.addEventListener('input', render);
+    dedupeEl.addEventListener('change', render);
     load();
   </script>
 </body>

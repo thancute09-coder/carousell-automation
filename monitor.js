@@ -111,6 +111,36 @@ function estimatePostedAt(record) {
 }
 
 /**
+ * Back-fill image_url on records in furniture_matches.json when the same
+ * listing_url was just re-scraped with an image. Returns the number of
+ * records updated. No-op if the map is empty or the file is missing.
+ */
+function enrichHistoricalImages(filePath, enrichmentMap) {
+  if (!enrichmentMap || enrichmentMap.size === 0) return 0;
+  if (!fs.existsSync(filePath)) return 0;
+  let records;
+  try {
+    records = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    if (!Array.isArray(records)) return 0;
+  } catch {
+    return 0;
+  }
+  let updated = 0;
+  for (const r of records) {
+    if (r.image_url && r.image_url.length > 0) continue; // already has one
+    const fresh = enrichmentMap.get(r.listing_url);
+    if (fresh) {
+      r.image_url = fresh;
+      updated++;
+    }
+  }
+  if (updated > 0) {
+    fs.writeFileSync(filePath, JSON.stringify(records, null, 2), 'utf8');
+  }
+  return updated;
+}
+
+/**
  * Rewrite a web-friendly JSON file: filtered to listings posted within
  * the past `maxAgeDays`, sorted newest-first by estimated post time,
  * capped to maxRows entries. The payload wraps the listings array with
@@ -522,6 +552,10 @@ async function scanOnce(browser, config, seen) {
   const jsonPath = path.join(ROOT, config.outputJson);
 
   const newMatches = [];
+  // Map of listing_url -> image_url scraped this run. Used to back-fill
+  // image_url on previously-seen records that were captured before image
+  // extraction was added.
+  const enrichmentMap = new Map();
 
   for (const url of config.searchUrls) {
     let context;
@@ -547,6 +581,9 @@ async function scanOnce(browser, config, seen) {
 
       for (const l of listings) {
         if (!l.listing_url) continue;
+        // Capture image_url for ALL scraped listings (new or already-seen)
+        // so we can back-fill missing images on historical records.
+        if (l.image_url) enrichmentMap.set(l.listing_url, l.image_url);
         if (seen[l.listing_url]) continue; // already reported
         if (!matchesKeyword(`${l.title} ${l.seller_name}`, config.keywords)) continue;
 
@@ -588,10 +625,31 @@ async function scanOnce(browser, config, seen) {
     await randomDelay(2500, 6000);
   }
 
+  // Back-fill image_url on historical records when we re-saw them this scan.
+  const enriched = enrichHistoricalImages(jsonPath, enrichmentMap);
+  if (enriched > 0) {
+    console.log(`[${nowIso()}] Enriched ${enriched} historical record(s) with image_url.`);
+  }
+
   if (newMatches.length === 0) {
     // Still persist seen state (in case earlier pushes set pushed_to_sheet flags).
     saveJson(SEEN_PATH, seen);
     console.log(`[${nowIso()}] No new matches this scan.`);
+    // Even when there are no new matches, regenerate the web JSON so the
+    // enriched image_url values flow into listings.json.
+    if (config.webJson) {
+      try {
+        const all = loadJson(jsonPath, []);
+        writeWebJson(
+          path.join(ROOT, config.webJson),
+          all,
+          config.webJsonMax || 500,
+          config.webJsonMaxAgeDays || null
+        );
+      } catch (err) {
+        console.error(`[${nowIso()}] Failed to write web JSON: ${err.message}`);
+      }
+    }
     // Even with no new matches, retry any unpushed records from disk.
     await retryUnpushedSheetRows(config, seen);
     return;
