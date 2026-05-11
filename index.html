@@ -58,13 +58,17 @@
       flex-wrap: wrap;
       align-items: center;
     }
-    .search, .price-input {
+    .search, .price-input, .sort-select {
       padding: 0.5rem 0.75rem;
       border: 1px solid var(--border);
       border-radius: 8px;
       font-size: 0.9rem;
       background: #fff;
       color: var(--text);
+    }
+    .sort-select {
+      cursor: pointer;
+      padding-right: 1.75rem;
     }
     .search { width: 220px; }
     .price-input {
@@ -220,6 +224,12 @@
         <div class="meta" id="meta">Loading…</div>
       </div>
       <div class="controls">
+        <select class="sort-select" id="sort" title="Sort">
+          <option value="date-desc">Newest first</option>
+          <option value="date-asc">Oldest first</option>
+          <option value="price-asc">Price: low → high</option>
+          <option value="price-desc">Price: high → low</option>
+        </select>
         <input type="search" class="search" id="search" placeholder="Filter title, location, seller…" autocomplete="off" />
         <span class="price-group">
           <input type="number" class="price-input" id="priceMin" placeholder="Min ₱" min="0" step="100" />
@@ -256,6 +266,7 @@
     const priceMinEl = document.getElementById('priceMin');
     const priceMaxEl = document.getElementById('priceMax');
     const dedupeEl = document.getElementById('dedupe');
+    const sortEl = document.getElementById('sort');
 
     let allListings = [];
 
@@ -345,14 +356,46 @@
         return true;
       });
 
+      // Apply the chosen sort order. Default `date-desc` matches the
+      // backend's newest-first ordering. Date sorts use estimated post
+      // time when available, falling back to first_seen_at.
+      const sortMode = sortEl.value;
+      const dateOf = (l) => {
+        const t = Date.parse(l.estimated_posted_at || l.first_seen_at || '');
+        return isNaN(t) ? 0 : t;
+      };
+      const sorted = [...filtered];
+      if (sortMode === 'date-asc') {
+        sorted.sort((a, b) => dateOf(a) - dateOf(b));
+      } else if (sortMode === 'price-asc') {
+        sorted.sort((a, b) => {
+          const pa = parsePrice(a.price); const pb = parsePrice(b.price);
+          // NaN prices go to the bottom of either sort direction.
+          if (isNaN(pa) && isNaN(pb)) return 0;
+          if (isNaN(pa)) return 1;
+          if (isNaN(pb)) return -1;
+          return pa - pb;
+        });
+      } else if (sortMode === 'price-desc') {
+        sorted.sort((a, b) => {
+          const pa = parsePrice(a.price); const pb = parsePrice(b.price);
+          if (isNaN(pa) && isNaN(pb)) return 0;
+          if (isNaN(pa)) return 1;
+          if (isNaN(pb)) return -1;
+          return pb - pa;
+        });
+      } else {
+        sorted.sort((a, b) => dateOf(b) - dateOf(a));
+      }
+
       // Optional: collapse duplicates by (title + price). Because the
       // source array is sorted newest-first, the first occurrence kept
       // is the most recent listing for that title/price combo.
-      let result = filtered;
+      let result = sorted;
       if (dedupeEl.checked) {
         const seenKeys = new Set();
         result = [];
-        for (const l of filtered) {
+        for (const l of sorted) {
           const t = (l.title || '').trim().toLowerCase().replace(/\s+/g, ' ');
           const p = parsePrice(l.price);
           const key = t + '|' + (isNaN(p) ? (l.price || '') : p);
@@ -389,6 +432,7 @@
     priceMinEl.addEventListener('input', render);
     priceMaxEl.addEventListener('input', render);
     dedupeEl.addEventListener('change', render);
+    sortEl.addEventListener('change', render);
     load();
   </script>
 </body>
