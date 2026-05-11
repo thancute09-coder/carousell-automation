@@ -1,14 +1,28 @@
 
-[2026-05-11T06:04:01.554Z] === Scan started ===
-[2026-05-11T06:04:01.557Z] Scanning: https://www.carousell.ph/search/vintage%20furniture?sort_by=time_created%2Cdescending
-[2026-05-11T06:04:14.819Z] Scanning: https://www.carousell.ph/search/antique%20furniture?sort_by=time_created%2Cdescending
-[2026-05-11T06:04:24.631Z] Scanning: https://www.carousell.ph/search/vintage%20dining%20table?sort_by=time_created%2Cdescending
-[2026-05-11T06:04:36.933Z] Scanning: https://www.carousell.ph/search/antique%20dining%20table?sort_by=time_created%2Cdescending
-[2026-05-11T06:04:50.190Z] Scanning: https://www.carousell.ph/search/vintage%20cabinet?sort_by=time_created%2Cdescending
-[2026-05-11T06:04:59.160Z] Scanning: https://www.carousell.ph/search/antique%20cabinet?sort_by=time_created%2Cdescending
-[2026-05-11T06:05:12.307Z] Scanning: https://www.carousell.ph/search/vintage%20sofa?sort_by=time_created%2Cdescending
-[2026-05-11T06:05:22.279Z] Scanning: https://www.carousell.ph/search/antique%20sofa?sort_by=time_created%2Cdescending
-[2026-05-11T06:05:35.765Z] No new matches this scan.
-[2026-05-11T06:05:35.773Z] --once mode: exiting after single scan.
+[2026-05-11T13:22:47.369Z] === Scan started ===
+[2026-05-11T13:22:47.371Z] Scanning: https://www.carousell.ph/search/vintage%20furniture?sort_by=time_created%2Cdescending
+[2026-05-11T13:22:56.491Z]   extracted 48 listing(s), 48 with image_url
+[2026-05-11T13:22:59.139Z] Scanning: https://www.carousell.ph/search/antique%20furniture?sort_by=time_created%2Cdescending
+[2026-05-11T13:23:05.592Z]   extracted 48 listing(s), 48 with image_url
+[2026-05-11T13:23:11.554Z] Scanning: https://www.carousell.ph/search/vintage%20dining%20table?sort_by=time_created%2Cdescending
+[2026-05-11T13:23:21.209Z]   extracted 48 listing(s), 48 with image_url
+[2026-05-11T13:23:24.629Z] Scanning: https://www.carousell.ph/search/antique%20dining%20table?sort_by=time_created%2Cdescending
+[2026-05-11T13:23:32.079Z]   extracted 48 listing(s), 48 with image_url
+[2026-05-11T13:23:37.082Z] Scanning: https://www.carousell.ph/search/vintage%20cabinet?sort_by=time_created%2Cdescending
+[2026-05-11T13:23:45.035Z]   extracted 48 listing(s), 48 with image_url
+[2026-05-11T13:23:50.697Z] Scanning: https://www.carousell.ph/search/antique%20cabinet?sort_by=time_created%2Cdescending
+[2026-05-11T13:23:59.771Z]   extracted 48 listing(s), 48 with image_url
+[2026-05-11T13:24:03.875Z] Scanning: https://www.carousell.ph/search/vintage%20sofa?sort_by=time_created%2Cdescending
+[2026-05-11T13:24:11.002Z]   extracted 48 listing(s), 48 with image_url
+[2026-05-11T13:24:13.831Z] Scanning: https://www.carousell.ph/search/antique%20sofa?sort_by=time_created%2Cdescending
+[2026-05-11T13:24:21.428Z]   extracted 29 listing(s), 29 with image_url
+[2026-05-11T13:24:24.442Z]   DEBUG enrich: map=351 keys, records=244, missing image_url=205, overlap=0
+[2026-05-11T13:24:24.442Z]   DEBUG map sample 1: https://www.carousell.ph/p/vintage-metal-half-circle-decor-1436716352
+[2026-05-11T13:24:24.442Z]   DEBUG map sample 2: https://www.carousell.ph/p/vintage-polly-pocket-bunny-and-dog-playsets-1436454621
+[2026-05-11T13:24:24.442Z]   DEBUG miss 1: raw=https://www.carousell.ph/p/maruni-solid-wood-cabinet-with-brass-handles-1436559422 | norm=https://www.carousell.ph/p/maruni-solid-wood-cabinet-with-brass-handles-1436559422
+[2026-05-11T13:24:24.442Z]   DEBUG miss 2: raw=https://www.carousell.ph/p/round-dining-table-1436436521 | norm=https://www.carousell.ph/p/round-dining-table-1436436521
+[2026-05-11T13:24:24.442Z]   DEBUG miss 3: raw=https://www.carousell.ph/p/dining-table-with-6-chairs-1430202082 | norm=https://www.carousell.ph/p/dining-table-with-6-chairs-1430202082
+[2026-05-11T13:24:24.446Z] No new matches this scan.
+[2026-05-11T13:24:24.453Z] --once mode: exiting after single scan.
 
-[2026-05-11T06:05:35.773Z] Shutting down...
+[2026-05-11T13:24:24.453Z] Shutting down...

@@ -125,11 +125,10 @@ function enrichHistoricalImages(filePath, enrichmentMap) {
   } catch {
     return 0;
   }
+
   let updated = 0;
   for (const r of records) {
-    if (r.image_url && r.image_url.length > 0) continue; // already has one
-    // Match by normalized URL — historical records may have stored URLs
-    // with old tracking params that wouldn't match the current scan's.
+    if (r.image_url && r.image_url.length > 0) continue;
     const fresh = enrichmentMap.get(normalizeListingUrl(r.listing_url));
     if (fresh) {
       r.image_url = fresh;

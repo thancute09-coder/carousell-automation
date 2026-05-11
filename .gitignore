@@ -3,3 +3,6 @@ node_modules/
 furniture_matches.csv
 furniture_matches.json
 seen_listings.json
+scan_output.txt
+*.bak.*
+.DS_Store
