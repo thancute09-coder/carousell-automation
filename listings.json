@@ -1,9 +1,22 @@
 {
-  "generated_at": "2026-05-12T03:13:48.859Z",
+  "generated_at": "2026-05-13T09:26:43.063Z",
   "window_days": 7,
-  "count": 143,
-  "total_matches": 245,
+  "count": 137,
+  "total_matches": 246,
   "listings": [
+    {
+      "title": "Designer Vintage Solid Wood Home Bar Cabinet with Wine & Glass Storage Statement piece",
+      "price": "PHP 78,000",
+      "location": "Like new",
+      "seller_name": "boo_thingthings",
+      "posted_time": "22 hours ago",
+      "listing_url": "https://www.carousell.ph/p/designer-vintage-solid-wood-home-bar-cabinet-with-wine-glass-storage-statement-piece-1425822530",
+      "image_url": "https://media.karousell.com/media/photos/products/2026/3/11/designer_vintage_solid_wood_ho_1773187896_be1503ea_progressive_thumbnail.jpg",
+      "source_search_url": "https://www.carousell.ph/search/vintage%20cabinet?sort_by=time_created%2Cdescending",
+      "first_seen_at": "2026-05-13T09:26:02.319Z",
+      "fresh_within_last_hour": false,
+      "estimated_posted_at": "2026-05-12T11:26:02.319Z"
+    },
     {
       "title": "Leather Accent Chair Furniture",
       "price": "PHP 4,800",
@@ -1769,97 +1782,6 @@
       "fresh_within_last_hour": false,
       "image_url": "https://media.karousell.com/media/photos/products/2026/4/4/dining_table_with_6_chairs_1775326409_5c8f22f3.jpg",
       "estimated_posted_at": "2026-05-06T13:19:22.654Z"
-    },
-    {
-      "title": "Vintage Side Table Cabinet",
-      "price": "PHP 3,800",
-      "location": "Lightly used",
-      "seller_name": "dannikkishoppe2",
-      "posted_time": "5 days ago",
-      "listing_url": "https://www.carousell.ph/p/vintage-side-table-cabinet-1436354303",
-      "image_url": "https://media.karousell.com/media/photos/products/2026/5/6/vintage_side_table_cabinet_1778051863_d5dd5542_progressive_thumbnail.jpg",
-      "source_search_url": "https://www.carousell.ph/search/vintage%20cabinet?sort_by=time_created%2Cdescending",
-      "first_seen_at": "2026-05-11T05:54:25.778Z",
-      "fresh_within_last_hour": false,
-      "estimated_posted_at": "2026-05-06T05:54:25.778Z"
-    },
-    {
-      "title": "Heavy duty solid wood Multi-layer cabinet chest drawer",
-      "price": "PHP 10,500",
-      "location": "PHP 12,000",
-      "seller_name": "paumeranian",
-      "posted_time": "5 days ago",
-      "listing_url": "https://www.carousell.ph/p/heavy-duty-solid-wood-multi-layer-cabinet-chest-drawer-1433221196",
-      "source_search_url": "https://www.carousell.ph/search/solid%20wood%20cabinet?sort_by=time_created%2Cdescending",
-      "first_seen_at": "2026-05-10T13:22:51.510Z",
-      "fresh_within_last_hour": false,
-      "image_url": "https://media.karousell.com/media/photos/products/2026/4/20/heavy_duty_solid_wood_multilay_1776650405_09601590.jpg",
-      "estimated_posted_at": "2026-05-05T13:22:51.510Z"
-    },
-    {
-      "title": "MCM Bentwood Japan Surplus Accent Chairs",
-      "price": "PHP 3,000",
-      "location": "Like new",
-      "seller_name": "jcbagio20",
-      "posted_time": "5 days ago",
-      "listing_url": "https://www.carousell.ph/p/mcm-bentwood-japan-surplus-accent-chairs-1430184265",
-      "source_search_url": "https://www.carousell.ph/search/accent%20chair?sort_by=time_created%2Cdescending",
-      "first_seen_at": "2026-05-10T13:22:33.720Z",
-      "fresh_within_last_hour": false,
-      "image_url": "https://media.karousell.com/media/photos/products/2026/4/4/mcm_bentwood_japan_surplus_acc_1775317484_b95ee94f.jpg",
-      "estimated_posted_at": "2026-05-05T13:22:33.720Z"
-    },
-    {
-      "title": "2pcs Accent Chairs Lc2 Inspired",
-      "price": "PHP 12,000",
-      "location": "Like new",
-      "seller_name": "elliefurnies31",
-      "posted_time": "5 days ago",
-      "listing_url": "https://www.carousell.ph/p/2pcs-accent-chairs-lc2-inspired-1436260336",
-      "source_search_url": "https://www.carousell.ph/search/accent%20chair?sort_by=time_created%2Cdescending",
-      "first_seen_at": "2026-05-10T13:22:33.720Z",
-      "fresh_within_last_hour": false,
-      "image_url": "https://media.karousell.com/media/photos/products/2026/5/5/2pcs_accent_chairs_lc2_inspire_1777997373_6b6189d3.jpg",
-      "estimated_posted_at": "2026-05-05T13:22:33.720Z"
-    },
-    {
-      "title": "4pcs Accent Chairs",
-      "price": "PHP 28,000",
-      "location": "Like new",
-      "seller_name": "elliefurnies31",
-      "posted_time": "5 days ago",
-      "listing_url": "https://www.carousell.ph/p/4pcs-accent-chairs-1436244361",
-      "source_search_url": "https://www.carousell.ph/search/accent%20chair?sort_by=time_created%2Cdescending",
-      "first_seen_at": "2026-05-10T13:22:33.720Z",
-      "fresh_within_last_hour": false,
-      "image_url": "https://media.karousell.com/media/photos/products/2026/5/5/4pcs_accent_chairs_1777991053_fef195ef.jpg",
-      "estimated_posted_at": "2026-05-05T13:22:33.720Z"
-    },
-    {
-      "title": "Mandaue Foam - Aragon Accent Chair (‼️ RUSH SALE ‼️ )",
-      "price": "PHP 2,800",
-      "location": "Like new",
-      "seller_name": "martinlorenzosaga",
-      "posted_time": "5 days ago",
-      "listing_url": "https://www.carousell.ph/p/mandaue-foam-aragon-accent-chair-%E2%80%BC%EF%B8%8F-rush-sale-%E2%80%BC%EF%B8%8F-1436135883",
-      "source_search_url": "https://www.carousell.ph/search/accent%20chair?sort_by=time_created%2Cdescending",
-      "first_seen_at": "2026-05-10T13:22:33.720Z",
-      "fresh_within_last_hour": false,
-      "image_url": "https://media.karousell.com/media/photos/products/2026/5/5/mandaue_foam__aragon_accent_ch_1777955496_aaf0f43a.jpg",
-      "estimated_posted_at": "2026-05-05T13:22:33.720Z"
-    },
-    {
-      "title": "Mandaue Foam - Aragon Accent Chair (‼️ RUSH SALE ‼️ )",
-      "price": "PHP 2,800",
-      "location": "Like new",
-      "seller_name": "fluxxxe",
-      "posted_time": "5 days ago",
-      "listing_url": "https://www.carousell.ph/p/mandaue-foam-aragon-accent-chair-%E2%80%BC%EF%B8%8F-rush-sale-%E2%80%BC%EF%B8%8F-1436134832",
-      "source_search_url": "https://www.carousell.ph/search/accent%20chair?sort_by=time_created%2Cdescending",
-      "first_seen_at": "2026-05-10T13:22:33.720Z",
-      "fresh_within_last_hour": false,
-      "image_url": "https://media.karousell.com/media/photos/products/2026/5/5/mandaue_foam__aragon_accent_ch_1777955093_35ae2393.jpg",
-      "estimated_posted_at": "2026-05-05T13:22:33.720Z"
     }
   ]
 }
